@@ -124,14 +124,18 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@theme {
+  --font-outfit: var(--font-outfit);
+  --font-geist-sans: var(--font-geist-sans);
+  --font-plus-jakarta-sans: var(--font-jakarta-sans);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-serif;
+    @apply font-plus-jakarta-sans;
   }
 }
