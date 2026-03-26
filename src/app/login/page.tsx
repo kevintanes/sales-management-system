@@ -9,21 +9,51 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import React, { ReactElement } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { HiOutlineLightningBolt } from "react-icons/hi";
+import { MdOutlineVerified } from "react-icons/md";
 import z from "zod";
+
+type ButtonCustomProps = {
+  title: string;
+  userPass: string;
+  icon: React.ReactElement<{ className: string }>;
+};
 
 const formSchema = z.object({
   username: z.string().min(5, "username must be atleast 5 characters"),
   password: z.string().min(5, "password must be atleast 5 characters"),
 });
 
+const ButtonCustom = ({ title, userPass, icon }: ButtonCustomProps) => {
+  return (
+    <Button
+      variant="tertiary"
+      className="h-fit gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-left transition-all hover:border-white/20 hover:bg-white/20"
+    >
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20">
+        {React.cloneElement(icon, {
+          className: "h-3.5 w-3.5 text-amber-400",
+        })}
+      </div>
+      <div>
+        <h6 className="text-xs font-semibold">{title}</h6>
+        <p className="text-xs text-blue-300">{userPass}</p>
+      </div>
+    </Button>
+  );
+};
+
 const LoginPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      password: "",
     },
   });
 
@@ -99,7 +129,26 @@ const LoginPage = () => {
                   </Field>
                 )}
               />
-              <Button>Masuk</Button>
+              <Button variant="secondary">Masuk</Button>
+
+              <Separator className="bg-white/10" />
+
+              <p className="border-white/10 text-xs text-blue-300">
+                Demo — Klik untuk isi otomatis:
+              </p>
+
+              <div className="grid grid-cols-2 gap-2">
+                <ButtonCustom
+                  title="Admin HQ"
+                  userPass="admin / admin123"
+                  icon={<MdOutlineVerified />}
+                />
+                <ButtonCustom
+                  title="Sales"
+                  userPass="sales1 / sales123"
+                  icon={<HiOutlineLightningBolt />}
+                />
+              </div>
             </FieldGroup>
           </form>
         </Card>
