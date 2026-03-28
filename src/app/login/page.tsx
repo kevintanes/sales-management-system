@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import React, { ReactElement } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { HiOutlineLightningBolt } from "react-icons/hi";
 import { MdOutlineVerified } from "react-icons/md";
