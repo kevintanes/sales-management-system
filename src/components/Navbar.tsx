@@ -1,13 +1,20 @@
 import { FiSidebar } from "react-icons/fi";
 import { LuShoppingCart } from "react-icons/lu";
 
-const Navbar = () => {
+type NavbarProps = {
+  onToggleSidebar: () => void;
+};
+
+const Navbar = ({ onToggleSidebar }: NavbarProps) => {
   return (
     <div className="sticky top-0 z-10 flex h-14 w-full items-center justify-between border-b px-5 shadow-sm">
       <div className="flex items-center gap-3">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-lg">
+        <button
+          onClick={onToggleSidebar}
+          className="flex h-7 w-7 items-center justify-center rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-lg"
+        >
           <FiSidebar />
-        </div>
+        </button>
         <h4 className="font-outfit font-semibold">Sales Management System</h4>
       </div>
       <div className="flex items-center gap-3">
