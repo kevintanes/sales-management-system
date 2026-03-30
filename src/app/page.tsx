@@ -3,6 +3,14 @@
 import Card from "@/components/Card";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import useSidebar from "@/hooks/useSidebar";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -11,6 +19,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { MdArrowForward } from "react-icons/md";
 import { RxPeople } from "react-icons/rx";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 type CardItemsProps = {
   title: string;
@@ -18,6 +27,11 @@ type CardItemsProps = {
   icon: ReactNode;
   iconColor: string;
   backgroundColor: string;
+};
+
+type ChartDataProps = {
+  day: string;
+  revenue: number;
 };
 
 const CARD_ITEMS: CardItemsProps[] = [
@@ -50,6 +64,30 @@ const CARD_ITEMS: CardItemsProps[] = [
     sum: "6",
   },
 ];
+
+const CHART_DATA: ChartDataProps[] = [
+  { day: "Mon", revenue: 8135424 },
+  { day: "Tue", revenue: 12201786 },
+  { day: "Wed", revenue: 16269048 },
+  { day: "Thu", revenue: 20336310 },
+  { day: "Fri", revenue: 14642143 },
+  { day: "Sat", revenue: 6507619 },
+  { day: "Sun", revenue: 3253809 },
+  // { day: "Mon", revenue: 813 },
+  // { day: "Tue", revenue: 122 },
+  // { day: "Wed", revenue: 162 },
+  // { day: "Thu", revenue: 203 },
+  // { day: "Fri", revenue: 146 },
+  // { day: "Sat", revenue: 650 },
+  // { day: "Sun", revenue: 325 },
+];
+
+const chartConfig = {
+  revenue: {
+    label: "Revenue",
+    color: "#1a4ea8",
+  },
+} satisfies ChartConfig;
 
 export default function Dashboard() {
   const { isOpen, toggle } = useSidebar();
@@ -96,8 +134,44 @@ export default function Dashboard() {
             </div>
             <div className="flex gap-8">
               {/* graph */}
-              <div className="bg-card flex-2 flex-col rounded-2xl shadow-md">
-                asdaf
+              <div className="bg-card border-border/50 flex-2 flex-col rounded-2xl border shadow-md">
+                <div className="border-border/50 border-b p-6">
+                  <div className="font-outfit font-semibold">
+                    Revenue Overview
+                  </div>
+                </div>
+                <ChartContainer
+                  config={chartConfig}
+                  className="min-h-87.5 w-full p-6"
+                >
+                  <BarChart accessibilityLayer data={CHART_DATA} barSize={50}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="day"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={10}
+                      tickFormatter={(value) =>
+                        `$${(value / 1000000).toFixed(0)}M`
+                      }
+                    />
+                    <ChartTooltip
+                      content={<ChartTooltipContent className="w-fit" />}
+                    />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar
+                      dataKey="revenue"
+                      fill="var(--color-revenue)"
+                      radius={5}
+                    />
+                  </BarChart>
+                </ChartContainer>
               </div>
 
               {/* recent orders */}
