@@ -4,10 +4,12 @@ import Card from "@/components/Card";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import useSidebar from "@/hooks/useSidebar";
+import Link from "next/link";
 import { ReactNode } from "react";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
+import { MdArrowForward } from "react-icons/md";
 import { RxPeople } from "react-icons/rx";
 
 type CardItemsProps = {
@@ -91,6 +93,104 @@ export default function Dashboard() {
                   </Card>
                 ),
               )}
+            </div>
+            <div className="flex gap-8">
+              {/* graph */}
+              <div className="bg-card flex-2 flex-col rounded-2xl shadow-md">
+                asdaf
+              </div>
+
+              {/* recent orders */}
+              <div className="bg-card flex-1 rounded-b-2xl shadow-md">
+                <div className="border-border/50 flex justify-between border-b p-6">
+                  <div className="font-outfit font-semibold">Recent Orders</div>
+                  <Link
+                    href="/orders"
+                    className="text-primary font-outfit flex items-center gap-1 text-sm font-medium hover:underline"
+                  >
+                    View All
+                    <span className="text-base">
+                      <MdArrowForward />
+                    </span>
+                  </Link>
+                </div>
+                <div className="max-h-100 overflow-auto">
+                  <div className="divide-border/50 divide-y">
+                    <Link
+                      href={`/orders/2`}
+                      className="hover:bg-muted/50 block p-4 transition-colors"
+                    >
+                      <div className="mb-1 flex justify-between">
+                        <p className="text-foreground font-semibold">
+                          ORD-20260322-9487
+                        </p>
+                        <div className="inline-flex items-center rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                          Delivered
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground text-sm">
+                        Toko Cahaya Elektronik
+                      </p>
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="text-muted-foreground text-xs">
+                          Mar 22, 2026
+                        </span>
+                        <span className="text-primary font-medium">
+                          $33,297,780.00
+                        </span>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/orders/2`}
+                      className="hover:bg-muted/50 block p-4 transition-colors"
+                    >
+                      <div className="mb-1 flex justify-between">
+                        <p className="text-foreground font-semibold">
+                          ORD-20260322-9487
+                        </p>
+                        <div className="inline-flex items-center rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                          Delivered
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground text-sm">
+                        Toko Cahaya Elektronik
+                      </p>
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="text-muted-foreground text-xs">
+                          Mar 22, 2026
+                        </span>
+                        <span className="text-primary font-medium">
+                          $33,297,780.00
+                        </span>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/orders/2`}
+                      className="hover:bg-muted/50 block p-4 transition-colors"
+                    >
+                      <div className="mb-1 flex justify-between">
+                        <p className="text-foreground font-semibold">
+                          ORD-20260322-9487
+                        </p>
+                        <div className="inline-flex items-center rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                          Delivered
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground text-sm">
+                        Toko Cahaya Elektronik
+                      </p>
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="text-muted-foreground text-xs">
+                          Mar 22, 2026
+                        </span>
+                        <span className="text-primary font-medium">
+                          $33,297,780.00
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>
