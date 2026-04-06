@@ -21,7 +21,7 @@ import { MdArrowForward } from "react-icons/md";
 import { RxPeople } from "react-icons/rx";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-type CardItemsProps = {
+type CardItem = {
   title: string;
   sum: string;
   icon: ReactNode;
@@ -29,12 +29,23 @@ type CardItemsProps = {
   backgroundColor: string;
 };
 
-type ChartDataProps = {
+type ChartDataPoint = {
   day: string;
   revenue: number;
 };
 
-const CARD_ITEMS: CardItemsProps[] = [
+type OrderStatus = "Delivered" | "Pending" | "Processing" | "Cancelled";
+
+type Order = {
+  id: string;
+  orderId: string;
+  status: OrderStatus;
+  customer: string;
+  date: string;
+  amount: string;
+};
+
+const CARD_ITEMS: CardItem[] = [
   {
     title: "Total Revenue",
     backgroundColor: "bg-blue-100",
@@ -65,7 +76,7 @@ const CARD_ITEMS: CardItemsProps[] = [
   },
 ];
 
-const CHART_DATA: ChartDataProps[] = [
+const CHART_DATA: ChartDataPoint[] = [
   { day: "Mon", revenue: 8135424 },
   { day: "Tue", revenue: 12201786 },
   { day: "Wed", revenue: 16269048 },
@@ -73,14 +84,41 @@ const CHART_DATA: ChartDataProps[] = [
   { day: "Fri", revenue: 14642143 },
   { day: "Sat", revenue: 6507619 },
   { day: "Sun", revenue: 3253809 },
-  // { day: "Mon", revenue: 813 },
-  // { day: "Tue", revenue: 122 },
-  // { day: "Wed", revenue: 162 },
-  // { day: "Thu", revenue: 203 },
-  // { day: "Fri", revenue: 146 },
-  // { day: "Sat", revenue: 650 },
-  // { day: "Sun", revenue: 325 },
 ];
+
+const RECENT_ORDERS: Order[] = [
+  {
+    id: "2",
+    orderId: "ORD-20260322-9487",
+    status: "Delivered",
+    customer: "Toko Cahaya Elektronik",
+    date: "Mar 22, 2026",
+    amount: "$33,297,780.00",
+  },
+  {
+    id: "3",
+    orderId: "ORD-20260321-8823",
+    status: "Pending",
+    customer: "Sinar Jaya Tech",
+    date: "Mar 21, 2026",
+    amount: "$12,450,000.00",
+  },
+  {
+    id: "4",
+    orderId: "ORD-20260320-7741",
+    status: "Processing",
+    customer: "Maju Bersama Store",
+    date: "Mar 20, 2026",
+    amount: "$8,100,500.00",
+  },
+];
+
+const STATUS_STYLES: Record<OrderStatus, string> = {
+  Delivered: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  Pending: "border-orange-200 bg-orange-50 text-orange-700",
+  Processing: "border-blue-200 bg-blue-50 text-blue-700",
+  Cancelled: "border-red-200 bg-red-50 text-red-700",
+};
 
 const chartConfig = {
   revenue: {
@@ -190,78 +228,37 @@ export default function Dashboard() {
                 </div>
                 <div className="max-h-100 overflow-auto">
                   <div className="divide-border/50 divide-y">
-                    <Link
-                      href={`/orders/2`}
-                      className="hover:bg-muted/50 block p-4 transition-colors"
-                    >
-                      <div className="mb-1 flex justify-between">
-                        <p className="text-foreground font-semibold">
-                          ORD-20260322-9487
-                        </p>
-                        <div className="inline-flex items-center rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                          Delivered
-                        </div>
-                      </div>
-                      <p className="text-muted-foreground text-sm">
-                        Toko Cahaya Elektronik
-                      </p>
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="text-muted-foreground text-xs">
-                          Mar 22, 2026
-                        </span>
-                        <span className="text-primary font-medium">
-                          $33,297,780.00
-                        </span>
-                      </div>
-                    </Link>
-                    <Link
-                      href={`/orders/2`}
-                      className="hover:bg-muted/50 block p-4 transition-colors"
-                    >
-                      <div className="mb-1 flex justify-between">
-                        <p className="text-foreground font-semibold">
-                          ORD-20260322-9487
-                        </p>
-                        <div className="inline-flex items-center rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                          Delivered
-                        </div>
-                      </div>
-                      <p className="text-muted-foreground text-sm">
-                        Toko Cahaya Elektronik
-                      </p>
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="text-muted-foreground text-xs">
-                          Mar 22, 2026
-                        </span>
-                        <span className="text-primary font-medium">
-                          $33,297,780.00
-                        </span>
-                      </div>
-                    </Link>
-                    <Link
-                      href={`/orders/2`}
-                      className="hover:bg-muted/50 block p-4 transition-colors"
-                    >
-                      <div className="mb-1 flex justify-between">
-                        <p className="text-foreground font-semibold">
-                          ORD-20260322-9487
-                        </p>
-                        <div className="inline-flex items-center rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                          Delivered
-                        </div>
-                      </div>
-                      <p className="text-muted-foreground text-sm">
-                        Toko Cahaya Elektronik
-                      </p>
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="text-muted-foreground text-xs">
-                          Mar 22, 2026
-                        </span>
-                        <span className="text-primary font-medium">
-                          $33,297,780.00
-                        </span>
-                      </div>
-                    </Link>
+                    {RECENT_ORDERS.map(
+                      ({ amount, customer, date, id, orderId, status }) => (
+                        <Link
+                          key={id}
+                          href={`/orders/${id}`}
+                          className="hover:bg-muted/50 block p-4 transition-colors"
+                        >
+                          <div className="mb-1 flex justify-between">
+                            <p className="text-foreground font-semibold">
+                              {orderId}
+                            </p>
+                            <div
+                              className={`inline-flex items-center rounded-xl border px-2.5 py-0.5 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${STATUS_STYLES[status]}`}
+                            >
+                              {status}
+                            </div>
+                          </div>
+                          <p className="text-muted-foreground text-sm">
+                            {customer}
+                          </p>
+                          <div className="mt-2 flex items-center justify-between">
+                            <span className="text-muted-foreground text-xs">
+                              {date}
+                            </span>
+                            <span className="text-primary font-medium">
+                              {amount}
+                            </span>
+                          </div>
+                        </Link>
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
