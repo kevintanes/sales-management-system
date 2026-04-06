@@ -3,14 +3,25 @@
 import Card from "@/components/Card";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import useSidebar from "@/hooks/useSidebar";
+import Link from "next/link";
 import { ReactNode } from "react";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
+import { MdArrowForward } from "react-icons/md";
 import { RxPeople } from "react-icons/rx";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-type CardItemsProps = {
+type CardItem = {
   title: string;
   sum: string;
   icon: ReactNode;
@@ -18,7 +29,23 @@ type CardItemsProps = {
   backgroundColor: string;
 };
 
-const CARD_ITEMS: CardItemsProps[] = [
+type ChartDataPoint = {
+  day: string;
+  revenue: number;
+};
+
+type OrderStatus = "Delivered" | "Pending" | "Processing" | "Cancelled";
+
+type Order = {
+  id: string;
+  orderId: string;
+  status: OrderStatus;
+  customer: string;
+  date: string;
+  amount: string;
+};
+
+const CARD_ITEMS: CardItem[] = [
   {
     title: "Total Revenue",
     backgroundColor: "bg-blue-100",
@@ -48,6 +75,57 @@ const CARD_ITEMS: CardItemsProps[] = [
     sum: "6",
   },
 ];
+
+const CHART_DATA: ChartDataPoint[] = [
+  { day: "Mon", revenue: 8135424 },
+  { day: "Tue", revenue: 12201786 },
+  { day: "Wed", revenue: 16269048 },
+  { day: "Thu", revenue: 20336310 },
+  { day: "Fri", revenue: 14642143 },
+  { day: "Sat", revenue: 6507619 },
+  { day: "Sun", revenue: 3253809 },
+];
+
+const RECENT_ORDERS: Order[] = [
+  {
+    id: "2",
+    orderId: "ORD-20260322-9487",
+    status: "Delivered",
+    customer: "Toko Cahaya Elektronik",
+    date: "Mar 22, 2026",
+    amount: "$33,297,780.00",
+  },
+  {
+    id: "3",
+    orderId: "ORD-20260321-8823",
+    status: "Pending",
+    customer: "Sinar Jaya Tech",
+    date: "Mar 21, 2026",
+    amount: "$12,450,000.00",
+  },
+  {
+    id: "4",
+    orderId: "ORD-20260320-7741",
+    status: "Processing",
+    customer: "Maju Bersama Store",
+    date: "Mar 20, 2026",
+    amount: "$8,100,500.00",
+  },
+];
+
+const STATUS_STYLES: Record<OrderStatus, string> = {
+  Delivered: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  Pending: "border-orange-200 bg-orange-50 text-orange-700",
+  Processing: "border-blue-200 bg-blue-50 text-blue-700",
+  Cancelled: "border-red-200 bg-red-50 text-red-700",
+};
+
+const chartConfig = {
+  revenue: {
+    label: "Revenue",
+    color: "#1a4ea8",
+  },
+} satisfies ChartConfig;
 
 export default function Dashboard() {
   const { isOpen, toggle } = useSidebar();
@@ -91,6 +169,99 @@ export default function Dashboard() {
                   </Card>
                 ),
               )}
+            </div>
+            <div className="flex gap-8">
+              {/* graph */}
+              <div className="bg-card border-border/50 flex-2 flex-col rounded-2xl border shadow-md">
+                <div className="border-border/50 border-b p-6">
+                  <div className="font-outfit font-semibold">
+                    Revenue Overview
+                  </div>
+                </div>
+                <ChartContainer
+                  config={chartConfig}
+                  className="min-h-87.5 w-full p-6"
+                >
+                  <BarChart accessibilityLayer data={CHART_DATA} barSize={50}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="day"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={10}
+                      tickFormatter={(value) =>
+                        `$${(value / 1000000).toFixed(0)}M`
+                      }
+                    />
+                    <ChartTooltip
+                      content={<ChartTooltipContent className="w-fit" />}
+                    />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar
+                      dataKey="revenue"
+                      fill="var(--color-revenue)"
+                      radius={5}
+                    />
+                  </BarChart>
+                </ChartContainer>
+              </div>
+
+              {/* recent orders */}
+              <div className="bg-card flex-1 rounded-b-2xl shadow-md">
+                <div className="border-border/50 flex justify-between border-b p-6">
+                  <div className="font-outfit font-semibold">Recent Orders</div>
+                  <Link
+                    href="/orders"
+                    className="text-primary font-outfit flex items-center gap-1 text-sm font-medium hover:underline"
+                  >
+                    View All
+                    <span className="text-base">
+                      <MdArrowForward />
+                    </span>
+                  </Link>
+                </div>
+                <div className="max-h-100 overflow-auto">
+                  <div className="divide-border/50 divide-y">
+                    {RECENT_ORDERS.map(
+                      ({ amount, customer, date, id, orderId, status }) => (
+                        <Link
+                          key={id}
+                          href={`/orders/${id}`}
+                          className="hover:bg-muted/50 block p-4 transition-colors"
+                        >
+                          <div className="mb-1 flex justify-between">
+                            <p className="text-foreground font-semibold">
+                              {orderId}
+                            </p>
+                            <div
+                              className={`inline-flex items-center rounded-xl border px-2.5 py-0.5 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${STATUS_STYLES[status]}`}
+                            >
+                              {status}
+                            </div>
+                          </div>
+                          <p className="text-muted-foreground text-sm">
+                            {customer}
+                          </p>
+                          <div className="mt-2 flex items-center justify-between">
+                            <span className="text-muted-foreground text-xs">
+                              {date}
+                            </span>
+                            <span className="text-primary font-medium">
+                              {amount}
+                            </span>
+                          </div>
+                        </Link>
+                      ),
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>

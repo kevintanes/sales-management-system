@@ -35,9 +35,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} ${outfit.variable} ${geistSans.variable} h-full antialiased `}
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${geistSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
