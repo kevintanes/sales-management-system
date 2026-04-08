@@ -16,7 +16,7 @@ const CustomerPage = () => {
         </div>
         <div className="flex items-end gap-3">
           <InputSearch />
-          <Button className="bg-primary text-primary-foreground min-h-10 gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:-translate-y-0.5">
+          <Button className="bg-primary text-primary-foreground min-h-10 gap-2 rounded-2xl px-4 py-2 font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5">
             <MdAdd className="mr-2" /> Add Customer
           </Button>
         </div>
