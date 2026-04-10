@@ -1,11 +1,12 @@
 import InputSearch from "@/components/InputSearch";
 import { Button } from "@/components/ui/button";
 import { MdAdd } from "react-icons/md";
+import CustomerCard from "./components/CustomerCard";
 
 const CustomerPage = () => {
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="flex justify-between">
+      <div className="mb-8 flex justify-between">
         <div>
           <h1 className="text-foreground font-outfit text-3xl font-bold">
             Customers
@@ -20,6 +21,17 @@ const CustomerPage = () => {
             <MdAdd className="mr-2" /> Add Customer
           </Button>
         </div>
+      </div>
+      <div className="grid grid-cols-3 gap-6">
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
+        <CustomerCard />
       </div>
     </div>
   );
