@@ -15,7 +15,7 @@ export default function DashboardLayout({
       <Sidebar isOpen={isOpen} />
       <div className="flex flex-1 flex-col">
         <Navbar onToggleSidebar={toggle} />
-        <main className="w-full p-6 lg:p-8">{children}</main>
+        <main className="mx-auto w-full max-w-7xl p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

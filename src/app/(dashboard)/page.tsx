@@ -1,6 +1,7 @@
 "use client";
 
 import Card from "@/components/Card";
+import PageHeader from "@/components/PageHeader";
 import {
   ChartContainer,
   ChartLegend,
@@ -126,16 +127,12 @@ const chartConfig = {
 
 const DashboardPage = () => {
   return (
-    <div className="mx-auto max-w-7xl space-y-8">
-      <div>
-        <h1 className="font-outfit text-foreground text-3xl font-bold">
-          Dashboard Overview
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Welcome back. Here&apos;s what&apos;s happening with Advance Digitals
-          today.
-        </p>
-      </div>
+    <div>
+      <PageHeader
+        title="Dashboard Overview"
+        description="Welcome back. Here's what's happening with Advance Digitals
+          today."
+      />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {CARD_ITEMS.map(({ title, backgroundColor, icon, iconColor, sum }) => (
           <Card
@@ -156,7 +153,7 @@ const DashboardPage = () => {
           </Card>
         ))}
       </div>
-      <div className="flex gap-8">
+      <div className="mt-8 flex gap-8">
         {/* graph */}
         <div className="bg-card border-border/50 flex-2 flex-col rounded-2xl border shadow-md">
           <div className="border-border/50 border-b p-6">

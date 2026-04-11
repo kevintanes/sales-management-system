@@ -31,10 +31,7 @@ const formSchema = z.object({
 
 const ButtonCustom = ({ title, userPass, icon }: ButtonCustomProps) => {
   return (
-    <Button
-      variant="tertiary"
-      className="h-fit gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-left transition-all hover:border-white/20 hover:bg-white/20"
-    >
+    <Button className="h-fit justify-start gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-left transition-all hover:border-white/20 hover:bg-white/20">
       <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20">
         {React.cloneElement(icon, {
           className: "h-3.5 w-3.5 text-amber-400",
