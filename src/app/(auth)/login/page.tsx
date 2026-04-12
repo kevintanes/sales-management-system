@@ -1,6 +1,7 @@
 "use client";
 
 import Card from "@/components/Card";
+import FormField from "@/components/FormField";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -32,8 +33,8 @@ const formSchema = z.object({
 const ButtonCustom = ({ title, userPass, icon }: ButtonCustomProps) => {
   return (
     <Button
-      variant="tertiary"
-      className="h-fit gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-left transition-all hover:border-white/20 hover:bg-white/20"
+      variant="ghost"
+      className="h-fit justify-start gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-left transition-all hover:border-white/20 hover:bg-white/20"
     >
       <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20">
         {React.cloneElement(icon, {
@@ -89,47 +90,27 @@ const LoginPage = () => {
           </div>
           <form>
             <FieldGroup>
-              <Controller
+              <FormField
+                control={form.control}
                 name="username"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field className="gap-0.5">
-                    <FieldLabel htmlFor="username" className="text-blue-100">
-                      Username
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="username"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Masukan username"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
+                label="Username"
+                placeholder="Masukan username"
+                inputClassName="border-white/20 bg-white/10 text-white placeholder:text-blue-300/60 focus:border-blue-400"
+                labelClassName="text-blue-100"
               />
-              <Controller
+
+              <FormField
+                control={form.control}
                 name="password"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field className="gap-0.5">
-                    <FieldLabel htmlFor="password" className="text-blue-100">
-                      Password
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="password"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Masukan password"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
+                label="Password"
+                placeholder="Masukan password"
+                type="password"
+                inputClassName="border-white/20 bg-white/10 text-white placeholder:text-blue-300/60 focus:border-blue-400"
+                labelClassName="text-blue-100"
               />
-              <Button variant="secondary">Masuk</Button>
+              <Button variant="secondary" size="lg" className="mt-2 w-full">
+                Masuk
+              </Button>
 
               <Separator className="bg-white/10" />
 
