@@ -6,6 +6,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import CategorySelect from "./CategorySelect";
 
 const DUMMY_CATEGORIES = [
   "Audio",
@@ -68,6 +69,8 @@ const ManageProductForm = () => {
           />
         </div>
 
+        <CategorySelect control={form.control} name="category_id" />
+
         <FormField
           control={form.control}
           name="unit"
@@ -80,7 +83,7 @@ const ManageProductForm = () => {
           <FormField
             control={form.control}
             name="price"
-            label="Price ($)"
+            label="Price (Rp)"
             type="number"
             placeholder="0"
           />
