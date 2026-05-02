@@ -29,8 +29,14 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-const ManageProductForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
+type ProductFormValues = z.infer<typeof formSchema>;
+
+interface ManageProductFormProps {
+  defaultValues?: Partial<ProductFormValues>;
+}
+
+const ManageProductForm = ({ defaultValues }: ManageProductFormProps) => {
+  const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       productname: "",
@@ -40,6 +46,7 @@ const ManageProductForm = () => {
       price: 0,
       stock: 0,
       unit: "",
+      ...defaultValues,
     },
   });
 
