@@ -8,15 +8,6 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import CategorySelect from "./CategorySelect";
 
-const DUMMY_CATEGORIES = [
-  "Audio",
-  "TV",
-  "Laptop",
-  "Phone",
-  "Tablet",
-  "Accessories",
-];
-
 const formSchema = z.object({
   productname: z.string().min(5, "Product name must be at least 5 characters"),
   brand: z.string().min(2, "Brand must be at least 2 characters"),
@@ -26,7 +17,6 @@ const formSchema = z.object({
   price: z.number().min(0, "Price must be a positive number"),
   stock: z.number().min(0, "Stock must be a positive number"),
   image: z.string().optional().or(z.literal("")),
-  description: z.string().optional(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -42,6 +32,7 @@ const ManageProductForm = ({ defaultValues }: ManageProductFormProps) => {
       productname: "",
       brand: "",
       category_id: "",
+      sku: "",
       image: "",
       price: 0,
       stock: 0,
