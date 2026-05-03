@@ -1,4 +1,7 @@
+"use client";
+
 import CategoryBadge from "@/components/CategoryBadge";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import FormDialog from "@/components/FormDialog";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -69,13 +72,22 @@ const ProductTableRow = ({
             }}
           />
         </FormDialog>
-        <Button
-          variant="ghost"
-          className="text-red-600 hover:-translate-y-0.5 hover:bg-red-50 hover:text-red-800 hover:shadow-md"
-          size="icon-lg"
-        >
-          <LucideTrash2 />
-        </Button>
+        <ConfirmDialog
+          trigger={
+            <Button
+              variant="ghost"
+              className="text-red-600 hover:-translate-y-0.5 hover:bg-red-50 hover:text-red-800 hover:shadow-md"
+              size="icon-lg"
+            >
+              <LucideTrash2 />
+            </Button>
+          }
+          title="Delete Product"
+          description="Are you sure you want to delete this product?"
+          confirmLabel="Delete"
+          variant="danger"
+          onConfirm={() => console.log(`Delete product: ${id}`)}
+        />
       </TableCell>
     </TableRow>
   );
