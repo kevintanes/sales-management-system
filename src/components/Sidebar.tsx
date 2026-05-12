@@ -46,7 +46,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
 
   return (
     <aside
-      className={`bg-sidebar min-h-screen overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "w-60" : "w-0"}`}
+      className={`bg-sidebar h-full overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "w-60" : "w-0"}`}
     >
       <div
         className={`w-60 ${isOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`}
