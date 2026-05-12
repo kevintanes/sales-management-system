@@ -48,6 +48,38 @@ const DUMMY_PRODUCT = [
     stock: 50,
     brand: "Logitech",
   },
+  {
+    id: 5,
+    productName: "MacBook Air M2",
+    productCategory: "Laptop",
+    price: 1199,
+    stock: 8,
+    brand: "Apple",
+  },
+  {
+    id: 6,
+    productName: 'Samsung QLED 55"',
+    productCategory: "TV",
+    price: 799,
+    stock: 3,
+    brand: "Samsung",
+  },
+  {
+    id: 7,
+    productName: "iPad Pro 12.9",
+    productCategory: "Tablet",
+    price: 1099,
+    stock: 15,
+    brand: "Apple",
+  },
+  {
+    id: 8,
+    productName: "JBL Flip 6",
+    productCategory: "Audio",
+    price: 129,
+    stock: 30,
+    brand: "JBL",
+  },
 ];
 
 const ProductsPage = () => {
@@ -68,7 +100,7 @@ const ProductsPage = () => {
           </>
         }
       />
-      <div className="grid grid-cols-4 gap-6 overflow-hidden">
+      <div className="grid grid-cols-4 gap-6">
         {DUMMY_PRODUCT.map((product) => (
           <CardProduct key={product.id} {...product} />
         ))}
