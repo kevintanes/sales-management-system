@@ -9,7 +9,7 @@ interface FormFieldProps<T extends FieldValues> {
   name: Path<T>;
   label: string;
   placeholder?: string;
-  type?: string;
+  type?: React.HTMLInputTypeAttribute;
   className?: string;
   inputClassName?: string;
   labelClassName?: string;
