@@ -12,7 +12,7 @@ const CustomerPage = () => {
         description="Manage retail stores and client relationships."
         action={
           <>
-            <InputSearch />
+            <InputSearch placeholder="Search customers..." />
             <FormDialog
               title="Add New Customer Store"
               triggerLabel="Add Customer"
