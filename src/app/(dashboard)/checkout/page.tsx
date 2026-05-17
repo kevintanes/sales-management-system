@@ -12,7 +12,7 @@ const CheckoutPage = () => {
         <div className="col-span-2 bg-yellow-900">grid kiri</div>
         <div className="col-span-1">
           <div className="text-card-foreground border-border/50 bg-card rounded-2xl border shadow-lg">
-            <div className="font-outfit border-b p-6 text-xl font-semibold tracking-tight">
+            <div className="font-outfit border-b px-6 pt-6 pb-4 text-xl font-semibold tracking-tight">
               Order Summary
             </div>
             <div className="p-6">

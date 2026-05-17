@@ -1,6 +1,7 @@
 "use client";
 
 import FormField from "@/components/FormField";
+import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Select,
@@ -124,7 +125,24 @@ const OrderSummaryForm = () => {
             </Field>
           )}
         />
+        <div className="space-y-3 border-y py-4">
+          <div className="text-muted-foreground flex justify-between">
+            <span>Subtotal</span>
+            <span>$5,999,000.00</span>
+          </div>
+          <div className="text-muted-foreground flex justify-between">
+            <span>Estimated Tax (10%)</span>
+            <span>$599,000</span>
+          </div>
+        </div>
+        <div className="text-foreground flex justify-between text-lg font-bold">
+          <span>Total</span>
+          <span>$6,589,900.00</span>
+        </div>
       </FieldGroup>
+      <Button className="mt-6 h-12 w-full cursor-pointer rounded-2xl text-base shadow-lg hover:-translate-y-1">
+        Confirm & Create Invoice
+      </Button>
     </form>
   );
 };
