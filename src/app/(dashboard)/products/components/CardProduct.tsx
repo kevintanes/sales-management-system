@@ -47,7 +47,7 @@ const CardProduct = ({
             Stock: {stock}
           </div>
         </div>
-        <Button size="lg" className="w-full cursor-pointer" variant="primary">
+        <Button size="lg" className="w-full" variant="primary">
           <LucideShoppingCart />
           Add to Order
         </Button>

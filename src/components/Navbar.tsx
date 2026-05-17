@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FiSidebar } from "react-icons/fi";
 import { LuShoppingCart } from "react-icons/lu";
 
@@ -19,7 +20,9 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
       </div>
       <div className="flex items-center gap-3">
         <div className="bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground flex h-8 w-8 items-center justify-center rounded-full">
-          <LuShoppingCart />
+          <Link href="/checkout">
+            <LuShoppingCart />
+          </Link>
         </div>
         <div className="hover:bg-accent flex items-center justify-center gap-2 rounded-lg px-2 py-1">
           <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-amber-300 bg-amber-100 text-xs font-bold text-amber-700">
