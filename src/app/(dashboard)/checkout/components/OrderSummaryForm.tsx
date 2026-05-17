@@ -140,7 +140,7 @@ const OrderSummaryForm = () => {
           <span>$6,589,900.00</span>
         </div>
       </FieldGroup>
-      <Button className="mt-6 h-12 w-full cursor-pointer rounded-2xl text-base shadow-lg hover:-translate-y-1">
+      <Button className="mt-6 h-12 w-full rounded-2xl text-base shadow-lg hover:-translate-y-1">
         Confirm & Create Invoice
       </Button>
     </form>
