@@ -3,6 +3,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/format";
 import { ORDER_STATUS_CLASSES, type Order } from "@/types/order";
 import { LucideEye } from "lucide-react";
+import Link from "next/link";
 
 const OrderTableRow = ({
   customerContact,
@@ -35,13 +36,15 @@ const OrderTableRow = ({
         {formatCurrency(total)}
       </TableCell>
       <TableCell className="text-right">
-        <Button
-          className="hover:bg-primary/10 hover:text-primary rounded-lg hover:-translate-y-0.5"
-          size="icon-lg"
-          variant="ghost"
-        >
-          <LucideEye />
-        </Button>
+        <Link href={`/orders/${id}`}>
+          <Button
+            className="hover:bg-primary/10 hover:text-primary rounded-lg hover:-translate-y-0.5"
+            size="icon-lg"
+            variant="ghost"
+          >
+            <LucideEye />
+          </Button>
+        </Link>
       </TableCell>
     </TableRow>
   );

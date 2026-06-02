@@ -23,7 +23,10 @@ const InvoiceTableRow = ({
       <TableCell className="text-destructive font-medium">{dueDate}</TableCell>
       <TableCell className="font-medium">{customer}</TableCell>
       <TableCell>
-        <Link href={`/orders`} className="text-primary hover:underline">
+        <Link
+          href={`/orders/${orderRef}`}
+          className="text-primary hover:underline"
+        >
           {orderRef}
         </Link>
       </TableCell>
@@ -38,14 +41,16 @@ const InvoiceTableRow = ({
         {formatCurrency(amount)}
       </TableCell>
       <TableCell className="text-right">
-        <Button
-          className="hover:text-primary hover:bg-primary/10 bg-clip-border transition-all hover:-translate-y-0.5 hover:shadow-md"
-          variant="ghost"
-          size="lg"
-        >
-          <LucideFileText />
-          View
-        </Button>
+        <Link href={`/invoices/${invoiceNumber}`}>
+          <Button
+            className="hover:text-primary hover:bg-primary/10 bg-clip-border transition-all hover:-translate-y-0.5 hover:shadow-md"
+            variant="ghost"
+            size="lg"
+          >
+            <LucideFileText />
+            View
+          </Button>
+        </Link>
       </TableCell>
     </TableRow>
   );
