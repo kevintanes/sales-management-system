@@ -45,7 +45,12 @@ const FormField = <T extends FieldValues>({
             placeholder={placeholder}
             className={inputClassName}
           />
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError
+              errors={[fieldState.error]}
+              className="text-left text-red-950"
+            />
+          )}
         </Field>
       )}
     />

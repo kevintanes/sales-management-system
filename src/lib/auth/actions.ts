@@ -1,10 +1,10 @@
-// src/lib/auth/actions.ts
 "use server";
 
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/auth/hash";
 import { signToken } from "@/lib/auth/jwt";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export type LoginResult = { success: true } | { success: false; error: string };
 
@@ -24,7 +24,7 @@ export async function loginAction(
     return { success: false, error: "Username atau password salah" };
   }
 
-  const token = signToken({
+  const token = await signToken({
     userId: user.id,
     username: user.username,
     role: user.role,
@@ -40,4 +40,10 @@ export async function loginAction(
   });
 
   return { success: true };
+}
+
+export async function logoutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete("token");
+  redirect("/login");
 }
