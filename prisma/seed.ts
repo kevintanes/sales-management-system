@@ -10,11 +10,21 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const hashedPassword = await hashPassword("SuperAdmin123!");
+  const superadminPassword = process.env.SEED_SUPERADMIN_PASSWORD;
+
+  if (!superadminPassword) {
+    throw new Error(
+      "SEED_SUPERADMIN_PASSWORD belum di-set di .env — tambahkan dulu sebelum seed",
+    );
+  }
+
+  const hashedPassword = await hashPassword(superadminPassword);
 
   const superadmin = await prisma.user.upsert({
     where: { username: "superadmin" },
-    update: {},
+    update: {
+      password: hashedPassword,
+    },
     create: {
       username: "superadmin",
       name: "Super Admin",
