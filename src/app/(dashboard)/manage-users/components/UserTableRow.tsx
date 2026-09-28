@@ -1,8 +1,12 @@
 "use client";
 
+import FormDialog from "@/components/FormDialog";
+import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { JwtPayload } from "@/lib/auth/jwt";
-import { LucideUserRound } from "lucide-react";
+import { LucidePen, LucideUserRound } from "lucide-react";
+import { useState } from "react";
+import UserForm from "./UserForm";
 
 type UserRowData = {
   id: string;
@@ -19,8 +23,14 @@ type UserTableRowProps = {
   currentUserRole: JwtPayload["role"];
 };
 
-const UserTableRow = ({ user, currentUserRole }: UserTableRowProps) => {
+const UserTableRow = ({
+  user,
+  currentUserId,
+  currentUserRole,
+}: UserTableRowProps) => {
   const canManage = currentUserRole === "SUPERADMIN" || user.role !== "SUPERADMIN";
+  const isSelf = user.id === currentUserId;
+  const [editOpen, setEditOpen] = useState(false);
 
   return (
     <TableRow className={`h-18 ${user.isActive ? "" : "opacity-60"}`}>
@@ -54,7 +64,39 @@ const UserTableRow = ({ user, currentUserRole }: UserTableRowProps) => {
           {user.isActive ? "Active" : "Inactive"}
         </span>
       </TableCell>
-      <TableCell className="text-right">{canManage && null}</TableCell>
+      <TableCell className="text-right">
+        {canManage && (
+          <FormDialog
+            title="Edit User"
+            open={editOpen}
+            onOpenChange={setEditOpen}
+            trigger={
+              <Button
+                variant="ghost"
+                className="mr-2 text-blue-600 hover:-translate-y-0.5 hover:bg-blue-50 hover:text-blue-800 hover:shadow-md"
+                size="icon-lg"
+              >
+                <LucidePen />
+              </Button>
+            }
+          >
+            <UserForm
+              mode="edit"
+              userId={user.id}
+              currentUserRole={currentUserRole}
+              isSelf={isSelf}
+              defaultValues={{
+                name: user.name,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                password: "",
+              }}
+              onSuccess={() => setEditOpen(false)}
+            />
+          </FormDialog>
+        )}
+      </TableCell>
     </TableRow>
   );
 };

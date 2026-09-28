@@ -10,6 +10,7 @@ import {
 import { requireRole } from "@/lib/auth/require-role";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
+import AddUserButton from "./components/AddUserButton";
 import UserFilters from "./components/UserFilters";
 import UserTableRow from "./components/UserTableRow";
 
@@ -65,7 +66,12 @@ const ManageUsersPage = async ({ searchParams }: ManageUsersPageProps) => {
       <PageHeader
         title="Manage Users"
         description="Add, edit, or deactivate user accounts."
-        action={<UserFilters />}
+        action={
+          <>
+            <UserFilters />
+            <AddUserButton currentUserRole={me.role} />
+          </>
+        }
       />
       <Table>
         <TableHeader className="bg-muted/50">
