@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/session";
 import DashboardShell from "@/components/DashboardShell";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
@@ -7,6 +8,10 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
 
   return <DashboardShell user={user}>{children}</DashboardShell>;
 }

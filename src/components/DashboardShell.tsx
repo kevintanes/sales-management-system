@@ -18,7 +18,7 @@ export default function DashboardShell({
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar isOpen={isOpen} />
+      <Sidebar isOpen={isOpen} user={user} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar onToggleSidebar={toggle} user={user} />
         <main className="mx-auto w-full max-w-7xl flex-1 overflow-y-auto p-6 lg:p-8">
