@@ -27,7 +27,9 @@ const ManageUsersPage = async ({ searchParams }: ManageUsersPageProps) => {
   const params = await searchParams;
 
   const q = params.q?.trim() || "";
-  const role = ROLE_VALUES.includes(params.role ?? "") ? params.role : undefined;
+  const role = ROLE_VALUES.includes(params.role ?? "")
+    ? params.role
+    : undefined;
   const page = Math.max(1, Number(params.page) || 1);
 
   const where: Prisma.UserWhereInput = {
@@ -86,10 +88,7 @@ const ManageUsersPage = async ({ searchParams }: ManageUsersPageProps) => {
         <TableBody>
           {users.length === 0 ? (
             <TableRow>
-              <td
-                colSpan={5}
-                className="text-muted-foreground p-6 text-center"
-              >
+              <td colSpan={5} className="text-muted-foreground p-6 text-center">
                 Tidak ada user
               </td>
             </TableRow>
