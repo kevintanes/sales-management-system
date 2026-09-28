@@ -1,11 +1,13 @@
 "use client";
 
+import ConfirmDialog from "@/components/ConfirmDialog";
 import FormDialog from "@/components/FormDialog";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { JwtPayload } from "@/lib/auth/jwt";
-import { LucidePen, LucideUserRound } from "lucide-react";
-import { useState } from "react";
+import { LucidePen, LucideUserRound, UserCheck, UserX } from "lucide-react";
+import { useState, useTransition } from "react";
+import { setUserActiveAction } from "../actions";
 import UserForm from "./UserForm";
 
 type UserRowData = {
@@ -31,6 +33,19 @@ const UserTableRow = ({
   const canManage = currentUserRole === "SUPERADMIN" || user.role !== "SUPERADMIN";
   const isSelf = user.id === currentUserId;
   const [editOpen, setEditOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [statusError, setStatusError] = useState<string | null>(null);
+
+  const handleToggleActive = () => {
+    startTransition(async () => {
+      const result = await setUserActiveAction(user.id, !user.isActive);
+      if (!result.success) {
+        setStatusError(result.error);
+      } else {
+        setStatusError(null);
+      }
+    });
+  };
 
   return (
     <TableRow className={`h-18 ${user.isActive ? "" : "opacity-60"}`}>
@@ -95,6 +110,36 @@ const UserTableRow = ({
               onSuccess={() => setEditOpen(false)}
             />
           </FormDialog>
+        )}
+        {canManage && !isSelf && (
+          <ConfirmDialog
+            trigger={
+              <Button
+                variant="ghost"
+                className={
+                  user.isActive
+                    ? "text-red-600 hover:-translate-y-0.5 hover:bg-red-50 hover:text-red-800 hover:shadow-md"
+                    : "text-green-600 hover:-translate-y-0.5 hover:bg-green-50 hover:text-green-800 hover:shadow-md"
+                }
+                size="icon-lg"
+                disabled={isPending}
+              >
+                {user.isActive ? <UserX /> : <UserCheck />}
+              </Button>
+            }
+            title={user.isActive ? "Nonaktifkan User" : "Aktifkan User"}
+            description={
+              user.isActive
+                ? `Apakah Anda yakin ingin menonaktifkan ${user.name}?`
+                : `Apakah Anda yakin ingin mengaktifkan kembali ${user.name}?`
+            }
+            confirmLabel={user.isActive ? "Nonaktifkan" : "Aktifkan"}
+            variant={user.isActive ? "danger" : "default"}
+            onConfirm={handleToggleActive}
+          />
+        )}
+        {statusError && (
+          <p className="text-destructive mt-1 text-xs">{statusError}</p>
         )}
       </TableCell>
     </TableRow>
