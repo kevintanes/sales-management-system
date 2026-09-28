@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { verifyToken, JwtPayload } from "@/lib/auth/jwt";
+import { prisma } from "@/lib/prisma";
 
 export async function getCurrentUser(): Promise<JwtPayload | null> {
   const cookieStore = await cookies();
@@ -7,5 +8,16 @@ export async function getCurrentUser(): Promise<JwtPayload | null> {
 
   if (!token) return null;
 
-  return await verifyToken(token);
+  const payload = await verifyToken(token);
+
+  if (!payload) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+    select: { id: true, username: true, role: true, isActive: true },
+  });
+
+  if (!user || !user.isActive) return null;
+
+  return { userId: user.id, username: user.username, role: user.role };
 }

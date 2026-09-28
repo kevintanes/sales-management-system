@@ -24,6 +24,10 @@ export async function loginAction(
     return { success: false, error: "Username atau password salah" };
   }
 
+  if (!user.isActive) {
+    return { success: false, error: "Akun Anda dinonaktifkan" };
+  }
+
   const token = await signToken({
     userId: user.id,
     username: user.username,

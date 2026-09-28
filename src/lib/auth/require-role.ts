@@ -17,3 +17,15 @@ export async function requireRole(
 
   return user;
 }
+
+export async function authorizeAction(
+  allowedRoles: JwtPayload["role"][],
+): Promise<JwtPayload | null> {
+  const user = await getCurrentUser();
+
+  if (!user) return null;
+
+  if (!allowedRoles.includes(user.role)) return null;
+
+  return user;
+}
