@@ -30,17 +30,19 @@ Required env vars (see `.env.example`): `DATABASE_URL` (pooled, transaction-mode
 
 **Two Postgres connection strings**: `DATABASE_URL` (pgbouncer/transaction-mode pooler, used at runtime by `src/lib/prisma.ts`) vs `DIRECT_URL` (session-mode, used by `prisma.config.ts` for migrations). Don't conflate them.
 
-**Auth is custom, not a library**: JWT-based sessions issued with `jose` (`src/lib/auth/jwt.ts`), stored in an httpOnly `token` cookie. `src/middleware.ts` gates every route except `/login` and redirects unauthenticated/invalid-token requests to `/login`. Role checks (`SUPERADMIN`/`ADMIN`/`SALES`) happen server-side via `requireRole()` (`src/lib/auth/require-role.ts`), not in middleware. `loginAction`/`logoutAction` in `src/lib/auth/actions.ts` are the only server actions for auth; passwords are hashed with bcrypt (`src/lib/auth/hash.ts`).
+**Auth is custom, not a library**: JWT-based sessions issued with `jose` (`src/lib/auth/jwt.ts`), stored in an httpOnly `token` cookie. `src/middleware.ts` gates every route except `/login` and redirects unauthenticated/invalid-token requests to `/login` (signature/expiry check only, no DB access — edge runtime). `getCurrentUser()` (`src/lib/auth/session.ts`) additionally re-fetches the user from the DB on every call and returns `null` if the user was deleted, `role` changed, or `isActive` is `false` — role always comes from the DB, never trusted from the JWT payload. `(dashboard)/layout.tsx` calls `getCurrentUser()` and redirects to `/login` if it's `null`, so a deactivated/deleted user is bounced on their next full page load. Role checks happen server-side via `requireRole()` (`src/lib/auth/require-role.ts`, redirects) for pages, or `authorizeAction()` (same file, returns `null` instead of redirecting) for server actions. `loginAction`/`logoutAction` in `src/lib/auth/actions.ts` are the only server actions for auth; passwords are hashed with bcrypt (`src/lib/auth/hash.ts`).
 
-**Route groups**: `src/app/(auth)/` holds the public login page; `src/app/(dashboard)/` holds every authenticated page (products, manage-products, orders, checkout, customers, invoices) and shares `DashboardShell` (Sidebar + Navbar layout) from its `layout.tsx`.
+**Known limitation**: Next.js client-side `<Link>` navigation between pages that share the same layout does not re-run that layout's Server Component, so the session check in `(dashboard)/layout.tsx` only fires on a hard reload or first navigation into the dashboard — not on every sidebar click. A deactivated user can keep clicking around stale pages in the same tab until they refresh or hit a page/action that calls `requireRole()`/`authorizeAction()` directly (every server action does, so mutations are always safe even if the UI briefly looks stale).
 
-Some dashboard pages still use dummy data; check `prisma/schema.prisma` for the models that already exist.
+**Route groups**: `src/app/(auth)/` holds the public login page; `src/app/(dashboard)/` holds every authenticated page (products, manage-products, manage-users, orders, checkout, customers, invoices) and shares `DashboardShell` (Sidebar + Navbar layout) from its `layout.tsx`.
 
-**Component conventions**: each dashboard route keeps its route-specific pieces in a local `components/` subfolder (e.g. `src/app/(dashboard)/manage-products/components/`); cross-route shared components live in `src/components/`; shadcn primitives live in `src/components/ui/` and are managed via `components.json` (aliases: `@/components`, `@/components/ui`, `@/lib`, `@/hooks`).
+Some dashboard pages still use dummy data; check `prisma/schema.prisma` for the models that already exist. `manage-users` (`src/app/(dashboard)/manage-users/`) is fully Prisma-backed and is a good reference for the read-in-Server-Component + Server-Action-mutation pattern.
+
+**Component conventions**: each dashboard route keeps its route-specific pieces in a local `components/` subfolder (e.g. `src/app/(dashboard)/manage-products/components/`); cross-route shared components live in `src/components/` (including `Pagination.tsx`, and `InputSearch`/`FilterButton` which accept optional `onChange`/`onValueChange` for client-controlled filtering); shadcn primitives live in `src/components/ui/` and are managed via `components.json` (aliases: `@/components`, `@/components/ui`, `@/lib`, `@/hooks`).
 
 ## Security
 
-- Every server action and every page that reads or mutates data must call `requireRole()` with the appropriate role(s).
+- Every server action must call `authorizeAction()` with the appropriate role(s); every page that reads or mutates data must call `requireRole()`.
 
 ## Data conventions
 
