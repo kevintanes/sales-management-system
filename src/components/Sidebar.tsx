@@ -6,22 +6,25 @@ import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { GoGear } from "react-icons/go";
 import { LiaFileInvoiceSolid } from "react-icons/lia";
-import { LuPackageSearch, LuShoppingCart } from "react-icons/lu";
+import { LuPackageSearch, LuShoppingCart, LuUserCog } from "react-icons/lu";
 import {
   MdOutlineDashboard,
   MdOutlineEventNote,
   MdOutlineVerified,
 } from "react-icons/md";
 import { RxPeople } from "react-icons/rx";
+import { JwtPayload } from "@/lib/auth/jwt";
 
 type SidebarProps = {
   isOpen: boolean;
+  user: JwtPayload | null;
 };
 
 type SidebarItem = {
   icon: ReactNode;
   title: string;
   href: string;
+  roles?: JwtPayload["role"][];
 };
 
 const sideBarItems: SidebarItem[] = [
@@ -32,6 +35,12 @@ const sideBarItems: SidebarItem[] = [
   { icon: <LiaFileInvoiceSolid />, title: "Invoices", href: "/invoices" },
   { icon: <RxPeople />, title: "Customers", href: "/customers" },
   { icon: <GoGear />, title: "Manage Products", href: "/manage-products" },
+  {
+    icon: <LuUserCog />,
+    title: "Manage Users",
+    href: "/manage-users",
+    roles: ["SUPERADMIN", "ADMIN"],
+  },
 ];
 
 const getIsActive = (href: string, pathname: string): boolean => {
@@ -41,8 +50,11 @@ const getIsActive = (href: string, pathname: string): boolean => {
   return pathname.startsWith(href);
 };
 
-const Sidebar = ({ isOpen }: SidebarProps) => {
+const Sidebar = ({ isOpen, user }: SidebarProps) => {
   const pathname = usePathname();
+  const visibleItems = sideBarItems.filter(
+    (item) => !item.roles || (user && item.roles.includes(user.role)),
+  );
 
   return (
     <aside
@@ -79,7 +91,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
             ADMIN & MANAGEMENT
           </div>
           <ul className="flex w-full flex-col gap-2 text-sm">
-            {sideBarItems.map(({ icon, title, href }) => {
+            {visibleItems.map(({ icon, title, href }) => {
               const isActive = getIsActive(href, pathname);
               return (
                 <li key={title}>
