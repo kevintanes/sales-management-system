@@ -13,18 +13,18 @@ import {
   MdOutlineVerified,
 } from "react-icons/md";
 import { RxPeople } from "react-icons/rx";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { CurrentUser, Role } from "@/lib/auth/types";
 
 type SidebarProps = {
   isOpen: boolean;
-  user: JwtPayload | null;
+  user: CurrentUser | null;
 };
 
 type SidebarItem = {
   icon: ReactNode;
   title: string;
   href: string;
-  roles?: JwtPayload["role"][];
+  roles?: Role[];
 };
 
 const sideBarItems: SidebarItem[] = [

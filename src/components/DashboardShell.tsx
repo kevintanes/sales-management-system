@@ -3,11 +3,11 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import useSidebar from "@/hooks/useSidebar";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { CurrentUser } from "@/lib/auth/types";
 
 type DashboardShellProps = {
   children: React.ReactNode;
-  user: JwtPayload | null;
+  user: CurrentUser | null;
 };
 
 export default function DashboardShell({

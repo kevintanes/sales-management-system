@@ -21,7 +21,7 @@ import {
   userCreateSchema,
   userUpdateSchema,
 } from "@/lib/validations/user";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { Role } from "@/lib/auth/types";
 
 type UserFormValues = UserCreateInput | UserUpdateInput;
 
@@ -29,12 +29,12 @@ interface UserFormProps {
   mode: "create" | "edit";
   defaultValues?: Partial<UserFormValues>;
   userId?: string;
-  currentUserRole: JwtPayload["role"];
+  currentUserRole: Role;
   isSelf?: boolean;
   onSuccess: () => void;
 }
 
-const ROLE_OPTIONS: JwtPayload["role"][] = ["SUPERADMIN", "ADMIN", "SALES"];
+const ROLE_OPTIONS: Role[] = ["SUPERADMIN", "ADMIN", "SALES"];
 
 const UserForm = ({
   mode,
@@ -82,7 +82,12 @@ const UserForm = ({
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
-        <FormField control={form.control} name="name" label="Name" placeholder="John Doe" />
+        <FormField
+          control={form.control}
+          name="name"
+          label="Name"
+          placeholder="John Doe"
+        />
         <FormField
           control={form.control}
           name="username"
@@ -130,7 +135,9 @@ const UserForm = ({
           control={form.control}
           name="password"
           label={
-            mode === "edit" ? "Password (kosongkan jika tidak diubah)" : "Password"
+            mode === "edit"
+              ? "Password (kosongkan jika tidak diubah)"
+              : "Password"
           }
           type="password"
           placeholder="********"

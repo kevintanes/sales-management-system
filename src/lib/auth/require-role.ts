@@ -1,14 +1,12 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/session";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { CurrentUser, Role } from "@/lib/auth/types";
 
-export async function requireRole(
-  allowedRoles: JwtPayload["role"][],
-): Promise<JwtPayload> {
+export async function requireRole(allowedRoles: Role[]): Promise<CurrentUser> {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/logout");
+    redirect("/login");
   }
 
   if (!allowedRoles.includes(user.role)) {
@@ -19,8 +17,8 @@ export async function requireRole(
 }
 
 export async function authorizeAction(
-  allowedRoles: JwtPayload["role"][],
-): Promise<JwtPayload | null> {
+  allowedRoles: Role[],
+): Promise<CurrentUser | null> {
   const user = await getCurrentUser();
 
   if (!user) return null;
