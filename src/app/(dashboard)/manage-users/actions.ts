@@ -117,19 +117,32 @@ export async function updateUserAction(
       return { success: false, error: "Username sudah dipakai" };
     }
 
-    await prisma.user.update({
-      where: { id },
-      data: {
-        name: data.name,
-        username: data.username,
-        email: data.email,
-        role: data.role,
-        ...(data.password !== "" && {
-          password: await hashPassword(data.password),
-        }),
-      },
-      select: { id: true },
-    });
+    const passwordChanged = data.password !== "";
+    const newPasswordHash = passwordChanged
+      ? await hashPassword(data.password)
+      : null;
+
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id },
+        data: {
+          name: data.name,
+          username: data.username,
+          email: data.email,
+          role: data.role,
+          ...(newPasswordHash && {
+            password: newPasswordHash,
+            failedLoginAttempts: 0,
+            lockedUntil: null,
+          }),
+        },
+        select: { id: true },
+      }),
+      // Ganti password = paksa logout di semua perangkat
+      ...(passwordChanged
+        ? [prisma.session.deleteMany({ where: { userId: id } })]
+        : []),
+    ]);
 
     revalidatePath("/manage-users");
     return { success: true };
@@ -162,11 +175,17 @@ export async function setUserActiveAction(
       return { success: false, error: "Anda tidak memiliki akses" };
     }
 
-    await prisma.user.update({
-      where: { id },
-      data: { isActive },
-      select: { id: true },
-    });
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id },
+        data: { isActive },
+        select: { id: true },
+      }),
+      // Nonaktifkan = hapus semua session user, jadi langsung logout
+      ...(isActive
+        ? []
+        : [prisma.session.deleteMany({ where: { userId: id } })]),
+    ]);
 
     revalidatePath("/manage-users");
     return { success: true };

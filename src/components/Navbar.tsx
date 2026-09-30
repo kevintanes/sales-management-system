@@ -14,11 +14,11 @@ import {
 import { Button } from "./ui/button";
 import { logoutAction } from "@/lib/auth/actions";
 import { LucideLogOut } from "lucide-react";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { CurrentUser } from "@/lib/auth/types";
 
 type NavbarProps = {
   onToggleSidebar: () => void;
-  user: JwtPayload | null;
+  user: CurrentUser | null;
 };
 
 const Navbar = ({ onToggleSidebar, user }: NavbarProps) => {

@@ -4,7 +4,7 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import FormDialog from "@/components/FormDialog";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { Role } from "@/lib/auth/types";
 import { LucidePen, LucideUserRound, UserCheck, UserX } from "lucide-react";
 import { useState, useTransition } from "react";
 import { setUserActiveAction } from "../actions";
@@ -15,14 +15,14 @@ type UserRowData = {
   name: string;
   username: string;
   email: string;
-  role: JwtPayload["role"];
+  role: Role;
   isActive: boolean;
 };
 
 type UserTableRowProps = {
   user: UserRowData;
   currentUserId: string;
-  currentUserRole: JwtPayload["role"];
+  currentUserRole: Role;
 };
 
 const UserTableRow = ({
@@ -30,7 +30,8 @@ const UserTableRow = ({
   currentUserId,
   currentUserRole,
 }: UserTableRowProps) => {
-  const canManage = currentUserRole === "SUPERADMIN" || user.role !== "SUPERADMIN";
+  const canManage =
+    currentUserRole === "SUPERADMIN" || user.role !== "SUPERADMIN";
   const isSelf = user.id === currentUserId;
   const [editOpen, setEditOpen] = useState(false);
   const [isPending, startTransition] = useTransition();

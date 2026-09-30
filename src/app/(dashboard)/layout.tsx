@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/logout");
+    redirect("/login");
   }
 
   return <DashboardShell user={user}>{children}</DashboardShell>;

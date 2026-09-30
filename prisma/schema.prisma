@@ -26,8 +26,27 @@ model User {
   role     Role   @default(SALES)
   isActive Boolean @default(true)
 
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+
+  sessions Session[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("sessions")
 }

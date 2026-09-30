@@ -1,15 +1,11 @@
 "use client";
 
 import FormDialog from "@/components/FormDialog";
-import { JwtPayload } from "@/lib/auth/jwt";
+import type { Role } from "@/lib/auth/types";
 import { useState } from "react";
 import UserForm from "./UserForm";
 
-const AddUserButton = ({
-  currentUserRole,
-}: {
-  currentUserRole: JwtPayload["role"];
-}) => {
+const AddUserButton = ({ currentUserRole }: { currentUserRole: Role }) => {
   const [open, setOpen] = useState(false);
 
   return (
