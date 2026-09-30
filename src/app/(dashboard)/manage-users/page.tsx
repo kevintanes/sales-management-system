@@ -3,6 +3,7 @@ import Pagination from "@/components/Pagination";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -10,13 +11,14 @@ import {
 import { requireRole } from "@/lib/auth/require-role";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
+import { Role } from "@/generated/prisma/enums";
 import AddUserButton from "./components/AddUserButton";
 import UserFilters from "./components/UserFilters";
 import UserTableRow from "./components/UserTableRow";
 
 const PAGE_SIZE = 10;
 
-const ROLE_VALUES = ["SUPERADMIN", "ADMIN", "SALES"];
+const ROLE_VALUES: string[] = Object.values(Role);
 
 type ManageUsersPageProps = {
   searchParams: Promise<{ q?: string; role?: string; page?: string }>;
@@ -28,7 +30,7 @@ const ManageUsersPage = async ({ searchParams }: ManageUsersPageProps) => {
 
   const q = params.q?.trim() || "";
   const role = ROLE_VALUES.includes(params.role ?? "")
-    ? params.role
+    ? (params.role as Role)
     : undefined;
   const page = Math.max(1, Number(params.page) || 1);
 
@@ -40,7 +42,7 @@ const ManageUsersPage = async ({ searchParams }: ManageUsersPageProps) => {
         { email: { contains: q, mode: "insensitive" } },
       ],
     }),
-    ...(role && { role: role as Prisma.UserWhereInput["role"] }),
+    ...(role && { role }),
   };
 
   const [users, total] = await prisma.$transaction([
@@ -88,9 +90,12 @@ const ManageUsersPage = async ({ searchParams }: ManageUsersPageProps) => {
         <TableBody>
           {users.length === 0 ? (
             <TableRow>
-              <td colSpan={5} className="text-muted-foreground p-6 text-center">
+              <TableCell
+                colSpan={5}
+                className="text-muted-foreground p-6 text-center"
+              >
                 Tidak ada user
-              </td>
+              </TableCell>
             </TableRow>
           ) : (
             users.map((user) => (

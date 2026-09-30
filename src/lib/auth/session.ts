@@ -1,8 +1,9 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { verifyToken, JwtPayload } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/prisma";
 
-export async function getCurrentUser(): Promise<JwtPayload | null> {
+export const getCurrentUser = cache(async (): Promise<JwtPayload | null> => {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
 
@@ -20,4 +21,4 @@ export async function getCurrentUser(): Promise<JwtPayload | null> {
   if (!user || !user.isActive) return null;
 
   return { userId: user.id, username: user.username, role: user.role };
-}
+});
