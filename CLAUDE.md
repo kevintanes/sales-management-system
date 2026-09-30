@@ -62,4 +62,4 @@ Some dashboard pages still use dummy data; check `prisma/schema.prisma` for the 
 - New features, refactors, Prisma schema changes, or auth changes: write a plan first. Once the plan is approved, create a GitHub issue from it via the `gh` CLI titled `"<ticket number> <task name>"`, then implement.
 - Before declaring a task done, `npm run typecheck` and `npm run lint` must pass.
 - PRs must reference the related issue (`Closes #<number>`) when one exists.
-- Never read `.env` files, and never run commands that delete database data without asking first.
+- Never read `.env` files (real secrets, including `.env.local` and other variants), and never run commands that delete database data without asking first. `.env.example` is a template with placeholders only, so reading and editing it is fine; never put real values in it.
