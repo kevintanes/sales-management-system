@@ -8,7 +8,7 @@ export async function requireRole(
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/logout");
   }
 
   if (!allowedRoles.includes(user.role)) {

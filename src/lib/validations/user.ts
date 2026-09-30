@@ -1,12 +1,13 @@
 import z from "zod";
 
 export const userCreateSchema = z.object({
-  name: z.string().min(2, "Nama minimal 2 karakter"),
+  name: z.string().trim().min(2, "Nama minimal 2 karakter"),
   username: z
     .string()
+    .trim()
     .min(3, "Username minimal 3 karakter")
     .regex(/^[a-z0-9_.]+$/, "Username hanya boleh huruf kecil, angka, _ dan ."),
-  email: z.string().email("Email tidak valid"),
+  email: z.string().trim().toLowerCase().email("Email tidak valid"),
   role: z.enum(["SUPERADMIN", "ADMIN", "SALES"]),
   password: z.string().min(8, "Password minimal 8 karakter"),
 });

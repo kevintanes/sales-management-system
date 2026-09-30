@@ -68,7 +68,10 @@ const LoginPage = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     setServerError(null);
     startTransition(async () => {
-      const result = await loginAction(values.username, values.password);
+      const result = await loginAction(
+        values.username.trim().toLowerCase(),
+        values.password,
+      );
       if (!result.success) {
         setServerError(result.error);
         return;

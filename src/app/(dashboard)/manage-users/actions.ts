@@ -25,7 +25,7 @@ export async function createUserAction(
   input: UserCreateInput,
 ): Promise<ActionResult> {
   const me = await authorizeAction(["SUPERADMIN", "ADMIN"]);
-  if (!me) return { success: false, error: "Forbidden" };
+  if (!me) return { success: false, error: "Anda tidak memiliki akses" };
 
   const parsed = userCreateSchema.safeParse(input);
   if (!parsed.success) {
@@ -34,7 +34,7 @@ export async function createUserAction(
   const data = parsed.data;
 
   if (me.role === "ADMIN" && data.role === "SUPERADMIN") {
-    return { success: false, error: "Forbidden" };
+    return { success: false, error: "Anda tidak memiliki akses" };
   }
 
   try {
@@ -78,7 +78,7 @@ export async function updateUserAction(
   input: UserUpdateInput,
 ): Promise<ActionResult> {
   const me = await authorizeAction(["SUPERADMIN", "ADMIN"]);
-  if (!me) return { success: false, error: "Forbidden" };
+  if (!me) return { success: false, error: "Anda tidak memiliki akses" };
 
   const parsed = userUpdateSchema.safeParse(input);
   if (!parsed.success) {
@@ -93,10 +93,10 @@ export async function updateUserAction(
     }
 
     if (me.role === "ADMIN" && target.role === "SUPERADMIN") {
-      return { success: false, error: "Forbidden" };
+      return { success: false, error: "Anda tidak memiliki akses" };
     }
     if (me.role === "ADMIN" && data.role === "SUPERADMIN") {
-      return { success: false, error: "Forbidden" };
+      return { success: false, error: "Anda tidak memiliki akses" };
     }
 
     if (id === me.userId && data.role !== target.role) {
@@ -146,7 +146,7 @@ export async function setUserActiveAction(
   isActive: boolean,
 ): Promise<ActionResult> {
   const me = await authorizeAction(["SUPERADMIN", "ADMIN"]);
-  if (!me) return { success: false, error: "Forbidden" };
+  if (!me) return { success: false, error: "Anda tidak memiliki akses" };
 
   if (id === me.userId) {
     return { success: false, error: "Tidak bisa mengubah status akun sendiri" };
@@ -159,7 +159,7 @@ export async function setUserActiveAction(
     }
 
     if (me.role === "ADMIN" && target.role === "SUPERADMIN") {
-      return { success: false, error: "Forbidden" };
+      return { success: false, error: "Anda tidak memiliki akses" };
     }
 
     await prisma.user.update({
