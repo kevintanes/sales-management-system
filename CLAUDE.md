@@ -51,6 +51,18 @@ Some dashboard pages still use dummy data; check `prisma/schema.prisma` for the 
 - Zod schemas live in `src/lib/validations/<domain>.ts` and are shared between the form and the server action.
 - Server actions return `{ success: true, data? }` or `{ success: false, error: string }` — never throw to the client.
 
+## Code style
+
+Write code that a junior/mid-level developer can read without help.
+
+- Prefer plain `if / else` and small named variables over clever one-liners. E.g. build Prisma `where` objects step by step (`if (q) { where.OR = [...] }`), not with conditional spreads (`...(q && { ... })`).
+- Use `if / else` instead of a ternary when choosing between two function calls or multi-line values. Short ternaries inside JSX (e.g. a className or label) are fine.
+- Map fields explicitly (`storeName: data.storeName, ...`) instead of `{ ...data, field: x }` when data is written to the database.
+- Keep zod schemas simple: validate with `.refine()` and do conversions (e.g. `normalizePhone()`) in the server action, so the form and the action share one type (`z.infer`). Avoid `.transform().pipe()` and `useForm<Input, unknown, Output>`.
+- Extract a small, well-named helper when a step needs explaining (e.g. `toCustomerData()`, `isValidPhone()`).
+- Comments: only for the "why" or non-obvious parts. Don't comment what the code already says.
+- When copying patterns from `manage-users`, apply these rules rather than its older style. `customers` is the reference for this style.
+
 ## Workflow
 
 - Main branch is `staging`. Never commit directly to `staging`.
