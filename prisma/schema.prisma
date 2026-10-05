@@ -18,12 +18,12 @@ enum Role {
 }
 
 model User {
-  id       String @id @default(cuid())
-  username String @unique
+  id       String  @id @default(cuid())
+  username String  @unique
   name     String
-  email    String @unique
+  email    String  @unique
   password String
-  role     Role   @default(SALES)
+  role     Role    @default(SALES)
   isActive Boolean @default(true)
 
   failedLoginAttempts Int       @default(0)
@@ -49,4 +49,21 @@ model Session {
 
   @@index([userId])
   @@map("sessions")
+}
+
+model Customer {
+  id        String  @id @default(cuid())
+  storeName String
+  ownerName String
+  phone     String  @unique // disimpan dalam bentuk ternormalisasi (08xxx)
+  email     String?
+  address   String
+  city      String
+  isActive  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("customers")
 }

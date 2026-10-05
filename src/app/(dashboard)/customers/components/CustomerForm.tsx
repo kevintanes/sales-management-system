@@ -4,37 +4,63 @@ import FormField from "@/components/FormField";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import z from "zod";
+import { createCustomerAction, updateCustomerAction } from "../actions";
+import { CustomerInput, customerSchema } from "@/lib/validations/customer";
 
-const formSchema = z.object({
-  storename: z.string().min(5, "Store name must be at least 5 characters"),
-  ownername: z.string().min(2, "Owner name must be at least 2 characters"),
-  phone: z.string().min(8, "Phone number is invalid"),
-  email: z.string().email("Invalid email").optional().or(z.literal("")),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-  city: z.string().min(2, "City is required"),
-});
+interface CustomerFormProps {
+  mode: "create" | "edit";
+  defaultValues?: Partial<CustomerInput>;
+  customerId?: string;
+  onSuccess: () => void;
+}
 
-const CustomerForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+const CustomerForm = ({
+  mode,
+  defaultValues,
+  customerId,
+  onSuccess,
+}: CustomerFormProps) => {
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<CustomerInput>({
+    resolver: zodResolver(customerSchema),
     defaultValues: {
-      storename: "",
-      ownername: "",
+      storeName: "",
+      ownerName: "",
       phone: "",
       email: "",
       address: "",
       city: "",
+      ...defaultValues,
     },
   });
 
+  const onSubmit = (values: CustomerInput) => {
+    startTransition(async () => {
+      let result;
+      if (mode === "create") {
+        result = await createCustomerAction(values);
+      } else {
+        result = await updateCustomerAction(customerId as string, values);
+      }
+
+      if (!result.success) {
+        form.setError("root", { message: result.error });
+        return;
+      }
+
+      onSuccess();
+    });
+  };
+
   return (
-    <form>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
         <FormField
           control={form.control}
-          name="storename"
+          name="storeName"
           label="Store Name"
           placeholder="Electro World"
         />
@@ -42,7 +68,7 @@ const CustomerForm = () => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="ownername"
+            name="ownerName"
             label="Owner / Contact"
             placeholder="Jane Doe"
           />
@@ -73,7 +99,20 @@ const CustomerForm = () => {
           placeholder="Jakarta"
         />
       </FieldGroup>
-      <Button className="mt-8 w-full" variant="primary" size="lg">
+
+      {form.formState.errors.root && (
+        <p className="text-destructive mt-4 text-sm">
+          {form.formState.errors.root.message}
+        </p>
+      )}
+
+      <Button
+        className="mt-8 w-full"
+        variant="primary"
+        size="lg"
+        type="submit"
+        disabled={isPending}
+      >
         Save Customer
       </Button>
     </form>
